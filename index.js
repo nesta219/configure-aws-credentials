@@ -1,7 +1,7 @@
 const core = require('@actions/core');
 const aws = require('aws-sdk');
 const assert = require('assert');
-const fs = require('fs').promises;
+const fs = require('fs');
 const path = require('path');
 
 // The max time that a GitHub action is allowed to run is 6 hours.
@@ -84,11 +84,11 @@ async function assumeRole(params) {
       webIdentityTokenFile :
       path.join(process.env.GITHUB_WORKSPACE, webIdentityTokenFile);
 
-    // if (! await fs.existsSync(webIdentityTokenFilePath)) {
-    //   throw new Error(`Web identity token file does not exist: ${webIdentityTokenFilePath}`);
-    // }
+    if (! fs.existsSync(webIdentityTokenFilePath)) {
+      throw new Error(`Web identity token file does not exist: ${webIdentityTokenFilePath}`);
+    }
 
-    assumeRoleRequest.WebIdentityToken = await fs.readFile(webIdentityTokenFilePath, 'utf8');
+    assumeRoleRequest.WebIdentityToken = await fs.promises.readFile(webIdentityTokenFilePath, 'utf8');
     assumeFunction = sts.assumeRoleWithWebIdentity.bind(sts);
   } 
 
