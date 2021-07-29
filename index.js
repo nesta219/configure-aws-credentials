@@ -77,7 +77,7 @@ async function assumeRole(params) {
     assumeRoleRequest.ExternalId = roleExternalId;
   }
 
-  let assumeFunction = sts.assumeRole;
+  let assumeFunction = sts.assumeRole.bind(sts);
 
   if(isDefined(webIdentityTokenFile)) {
     const webIdentityTokenFilePath = path.isAbsolute(webIdentityTokenFile) ?
@@ -89,7 +89,7 @@ async function assumeRole(params) {
     // }
 
     assumeRoleRequest.WebIdentityToken = await fs.readFile(webIdentityTokenFilePath, 'utf8');
-    assumeFunction = sts.assumeRoleWithWebIdentity;
+    assumeFunction = sts.assumeRoleWithWebIdentity.bind(sts);
   } 
 
   return assumeFunction(assumeRoleRequest)
