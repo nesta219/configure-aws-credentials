@@ -84,9 +84,9 @@ async function assumeRole(params) {
       webIdentityTokenFile :
       path.join(process.env.GITHUB_WORKSPACE, webIdentityTokenFile);
 
-    if (! await fs.existsSync(webIdentityTokenFilePath)) {
-      throw new Error(`Web identity token file does not exist: ${webIdentityTokenFilePath}`);
-    }
+    // if (! await fs.existsSync(webIdentityTokenFilePath)) {
+    //   throw new Error(`Web identity token file does not exist: ${webIdentityTokenFilePath}`);
+    // }
 
     assumeRoleRequest.WebIdentityToken = await fs.readFile(webIdentityTokenFilePath, 'utf8');
     assumeFunction = sts.assumeRoleWithWebIdentity;
