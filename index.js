@@ -70,7 +70,7 @@ async function assumeRole(params) {
     RoleArn: roleArn,
     RoleSessionName: roleSessionName,
     DurationSeconds: roleDurationSeconds,
-    //Tags: roleSessionTags
+    Tags: roleSessionTags
   };
 
   if (roleExternalId) {
