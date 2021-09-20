@@ -80,7 +80,7 @@ async function assumeRole(params) {
   }
 
   if (audience) {
-    assumeRoleRequest.Audience = roleExternalId;
+    assumeRoleRequest.Audience = audience;
   }
 
   let assumeFunction = sts.assumeRole.bind(sts);
