@@ -25,7 +25,8 @@ async function assumeRole(params) {
     roleSessionName,
     region,
     roleSkipSessionTagging,
-    webIdentityTokenFile
+    webIdentityTokenFile,
+    audience
   } = params;
   assert(
       [sourceAccountId, roleToAssume, roleDurationSeconds, roleSessionName, region].every(isDefined),
@@ -76,6 +77,10 @@ async function assumeRole(params) {
 
   if (roleExternalId) {
     assumeRoleRequest.ExternalId = roleExternalId;
+  }
+
+  if (audience) {
+    assumeRoleRequest.Audience = roleExternalId;
   }
 
   let assumeFunction = sts.assumeRole.bind(sts);
@@ -238,7 +243,8 @@ async function run() {
     const roleSessionName = core.getInput('role-session-name', { required: false }) || ROLE_SESSION_NAME;
     const roleSkipSessionTaggingInput = core.getInput('role-skip-session-tagging', { required: false })|| 'false';
     const roleSkipSessionTagging = roleSkipSessionTaggingInput.toLowerCase() === 'true';
-    const webIdentityTokenFile = core.getInput('web-identity-token-file', { required: false })
+    const webIdentityTokenFile = core.getInput('web-identity-token-file', { required: false });
+    const audience = core.getInput('audience', { required: false });
 
     if (!region.match(REGION_REGEX)) {
       throw new Error(`Region is not valid: ${region}`);
@@ -278,7 +284,8 @@ async function run() {
         roleDurationSeconds,
         roleSessionName,
         roleSkipSessionTagging,
-        webIdentityTokenFile
+        webIdentityTokenFile,
+        audience
       });
       exportCredentials(roleCredentials);
       await validateCredentials(roleCredentials.accessKeyId);
